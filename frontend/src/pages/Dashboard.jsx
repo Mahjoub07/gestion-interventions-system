@@ -57,7 +57,7 @@ const Dashboard = () => {
     };
     fetchData();
     return () => { isMounted = false; };
-  }, []);
+  }, [hasRole, showToast, user?.email, user?.id]);
 
   const stats = {
     total: interventions.length,
