@@ -34,6 +34,5 @@ export const ROLE_COLORS = {
   TECHNICIAN: 'success'
 };
 
-export const API_BASE_URL = 'http://localhost:8090/api';
-
+export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8090/api';
 export const PAGINATION_OPTIONS = [10, 20, 50];
