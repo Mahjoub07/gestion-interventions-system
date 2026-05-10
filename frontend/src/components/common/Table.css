@@ -1,0 +1,137 @@
+.table-wrapper {
+  width: 100%;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+.table__th {
+  padding: 16px 24px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #475569;
+  background-color: #F8FAFC;
+  border-bottom: 1px solid var(--border-default);
+  white-space: nowrap;
+  user-select: none;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.table__th--sortable {
+  cursor: pointer;
+}
+
+.table__th--sortable:hover {
+  background-color: #F1F5F9;
+}
+
+.table__th--right {
+  text-align: right;
+}
+
+.table__th-content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.table__sort-icon {
+  font-size: 0.75rem;
+  color: var(--gray-400);
+}
+
+.table__sort-icon--active {
+  color: var(--primary);
+}
+
+.table__td {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+.table__td--right {
+  text-align: right;
+}
+
+.table__tr:hover {
+  background-color: #F8FAFC;
+}
+
+.table__tr:last-child .table__td {
+  border-bottom: none;
+}
+
+.table__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border-default);
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.table__pagination-info {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.table__pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.table__pagination-select {
+  padding: 6px 10px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius);
+  font-size: var(--text-sm);
+  background-color: var(--bg-card);
+}
+
+.table__pagination-buttons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.table__pagination-page {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  padding: 0 8px;
+}
+
+@media (max-width: 768px) {
+  .table__th,
+  .table__td {
+    padding: 12px 16px;
+    font-size: 0.875rem;
+  }
+
+  .table__pagination {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .table__pagination-controls {
+    justify-content: space-between;
+    width: 100%;
+  }
+}

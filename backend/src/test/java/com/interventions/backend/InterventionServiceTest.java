@@ -49,6 +49,7 @@ class InterventionServiceTest {
 
     @Test
     void shouldDeleteIntervention() {
+        when(repository.existsById(1L)).thenReturn(true);
         service.delete(1L);
         verify(repository, times(1)).deleteById(1L);
     }
