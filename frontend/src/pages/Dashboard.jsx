@@ -14,13 +14,13 @@ import { formatDate, truncate } from '../utils/helpers';
 import './Dashboard.css';
 
 const StatCard = ({ title, value, icon, color, onClick }) => (
-  <div className={`stat-card stat-card--${color}`} onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
-    <div className="stat-card__icon">{icon}</div>
-    <div className="stat-card__content">
-      <span className="stat-card__value">{value}</span>
-      <span className="stat-card__title">{title}</span>
+    <div className={`stat-card stat-card--${color}`} onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
+      <div className="stat-card__icon">{icon}</div>
+      <div className="stat-card__content">
+        <span className="stat-card__value">{value}</span>
+        <span className="stat-card__title">{title}</span>
+      </div>
     </div>
-  </div>
 );
 
 const Dashboard = () => {
@@ -38,8 +38,8 @@ const Dashboard = () => {
         setLoading(true);
         setError('');
         let response;
-        if (hasRole('TECHNICIAN')) {
-          response = await interventionService.getByTechnicienEmail(user.email);
+        if (hasRole('TECHNICIEN')) {
+          response = await interventionService.getByTechnicien(user.id);
         } else if (hasRole('USER')) {
           response = await interventionService.getByUser(user.id);
         } else {
@@ -57,18 +57,19 @@ const Dashboard = () => {
     };
     fetchData();
     return () => { isMounted = false; };
-  }, [hasRole, showToast, user?.email, user?.id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const stats = {
     total: interventions.length,
     enAttente: interventions.filter(i => i.statut === 'EN_ATTENTE').length,
     enCours: interventions.filter(i => i.statut === 'EN_COURS').length,
-    terminees: interventions.filter(i => i.statut === 'TERMINE').length,
+    terminees: interventions.filter(i => i.statut === 'TERMINEE').length,
   };
 
   const recentInterventions = [...interventions]
-    .sort((a, b) => new Date(b.dateIntervention || 0) - new Date(a.dateIntervention || 0))
-    .slice(0, 5);
+      .sort((a, b) => new Date(b.dateIntervention || 0) - new Date(a.dateIntervention || 0))
+      .slice(0, 5);
 
   const columns = [
     { key: 'titre', title: 'Titre' },
@@ -81,43 +82,43 @@ const Dashboard = () => {
   if (loading) return <LoadingSpinner fullPage />;
 
   return (
-    <div className="dashboard">
-      <div className="dashboard__header">
-        <div>
-          <h1 className="dashboard__title">Tableau de bord</h1>
-          <p className="dashboard__subtitle">Bienvenue, {user?.prenom} {user?.nom}</p>
+      <div className="dashboard">
+        <div className="dashboard__header">
+          <div>
+            <h1 className="dashboard__title">Tableau de bord</h1>
+            <p className="dashboard__subtitle">Bienvenue, {user?.prenom} {user?.nom}</p>
+          </div>
+          {!hasRole('TECHNICIEN') && (
+              <Button variant="primary" onClick={() => navigate('/interventions')}>
+                + Nouvelle Intervention
+              </Button>
+          )}
         </div>
-        {!hasRole('TECHNICIAN') && (
-          <Button variant="primary" onClick={() => navigate('/interventions')}>
-            + Nouvelle Intervention
-          </Button>
-        )}
-      </div>
 
-      <div className="dashboard__stats">
-        <StatCard title="Total Interventions" value={stats.total} icon="📋" color="primary" />
-        <StatCard title={STATUT_LABELS.EN_ATTENTE} value={stats.enAttente} icon="⏳" color="warning" onClick={() => navigate('/interventions')} />
-        <StatCard title={STATUT_LABELS.EN_COURS} value={stats.enCours} icon="🔧" color="info" onClick={() => navigate('/interventions')} />
-        <StatCard title={STATUT_LABELS.TERMINE} value={stats.terminees} icon="✅" color="success" onClick={() => navigate('/interventions')} />
-      </div>
+        <div className="dashboard__stats">
+          <StatCard title="Total Interventions" value={stats.total} icon="📋" color="primary" />
+          <StatCard title={STATUT_LABELS.EN_ATTENTE} value={stats.enAttente} icon="⏳" color="warning" onClick={() => navigate('/interventions')} />
+          <StatCard title={STATUT_LABELS.EN_COURS} value={stats.enCours} icon="🔧" color="info" onClick={() => navigate('/interventions')} />
+          <StatCard title={STATUT_LABELS.TERMINE} value={stats.terminees} icon="✅" color="success" onClick={() => navigate('/interventions')} />
+        </div>
 
-      <div className="dashboard__actions">
-        <Button variant="secondary" size="sm" onClick={() => navigate('/interventions')}>🔧 Gérer les interventions</Button>
-        {hasRole('ADMIN') && (
-          <Button variant="secondary" size="sm" onClick={() => navigate('/technicians')}>👷 Gérer les techniciens</Button>
-        )}
-      </div>
+        <div className="dashboard__actions">
+          <Button variant="secondary" size="sm" onClick={() => navigate('/interventions')}>🔧 Gérer les interventions</Button>
+          {hasRole('ADMIN') && (
+              <Button variant="secondary" size="sm" onClick={() => navigate('/technicians')}>👷 Gérer les techniciens</Button>
+          )}
+        </div>
 
-      <Card title="Interventions récentes" subtitle="Les 5 dernières interventions">
-        {error ? (
-          <div className="dashboard__error">{error}</div>
-        ) : recentInterventions.length === 0 ? (
-          <EmptyState title="Aucune intervention" message="Créez votre première intervention pour commencer." />
-        ) : (
-          <Table columns={columns} data={recentInterventions} keyExtractor={(row) => row.id} />
-        )}
-      </Card>
-    </div>
+        <Card title="Interventions récentes" subtitle="Les 5 dernières interventions">
+          {error ? (
+              <div className="dashboard__error">{error}</div>
+          ) : recentInterventions.length === 0 ? (
+              <EmptyState title="Aucune intervention" message="Créez votre première intervention pour commencer." />
+          ) : (
+              <Table columns={columns} data={recentInterventions} keyExtractor={(row) => row.id} />
+          )}
+        </Card>
+      </div>
   );
 };
 
