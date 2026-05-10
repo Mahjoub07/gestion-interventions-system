@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/gestion-interventions-system/static/css/main.d176063e.css",
-    "main.js": "/gestion-interventions-system/static/js/main.907fc489.js",
+    "main.js": "/gestion-interventions-system/static/js/main.12427095.js",
     "index.html": "/gestion-interventions-system/index.html",
     "main.d176063e.css.map": "/gestion-interventions-system/static/css/main.d176063e.css.map",
-    "main.907fc489.js.map": "/gestion-interventions-system/static/js/main.907fc489.js.map"
+    "main.12427095.js.map": "/gestion-interventions-system/static/js/main.12427095.js.map"
   },
   "entrypoints": [
     "static/css/main.d176063e.css",
-    "static/js/main.907fc489.js"
+    "static/js/main.12427095.js"
   ]
 }
