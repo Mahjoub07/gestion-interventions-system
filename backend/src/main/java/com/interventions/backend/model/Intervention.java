@@ -23,11 +23,11 @@ public class Intervention {
     @Enumerated(EnumType.STRING)
     private Statut statut = Statut.EN_ATTENTE;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "technicien_id")
     private Technicien technicien;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 }
