@@ -5,6 +5,7 @@ const interventionService = {
   getById: (id) => api.get(`/interventions/${id}`),
   getByStatut: (statut) => api.get(`/interventions/statut/${statut}`),
   getByTechnicien: (technicienId) => api.get(`/interventions/technicien/${technicienId}`),
+  getByTechnicienEmail: (email) => api.get(`/interventions/technicien/email/${email}`),
   getByUser: (userId) => api.get(`/interventions/user/${userId}`),
   create: (data) => api.post('/interventions', data),
   update: (id, data) => api.put(`/interventions/${id}`, data),

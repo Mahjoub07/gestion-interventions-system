@@ -3,6 +3,8 @@ package com.interventions.backend.service;
 import com.interventions.backend.model.Intervention;
 import com.interventions.backend.model.enums.Statut;
 import com.interventions.backend.repository.InterventionRepository;
+import com.interventions.backend.repository.TechnicienRepository;
+import com.interventions.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,10 +15,12 @@ import java.util.List;
 public class InterventionService {
 
     private final InterventionRepository repository;
+    private final TechnicienRepository technicienRepository;
+    private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
     public List<Intervention> findAll() {
-        return repository.findAll();
+        return repository.findAllWithRelations();
     }
 
     @Transactional(readOnly = true)
@@ -40,6 +44,11 @@ public class InterventionService {
         return repository.findByUserId(userId);
     }
 
+    @Transactional(readOnly = true)
+    public List<Intervention> findByTechnicienEmail(String email) {
+        return repository.findByTechnicienEmail(email);
+    }
+
     @Transactional
     public Intervention save(Intervention intervention) {
         return repository.save(intervention);
@@ -51,8 +60,20 @@ public class InterventionService {
                 .orElseThrow(() -> new RuntimeException("Intervention non trouvée"));
         existing.setTitre(updated.getTitre());
         existing.setDescription(updated.getDescription());
+        existing.setDateIntervention(updated.getDateIntervention());
         existing.setStatut(updated.getStatut());
-        existing.setTechnicien(updated.getTechnicien());
+        if (updated.getTechnicien() != null && updated.getTechnicien().getId() != null) {
+            existing.setTechnicien(technicienRepository.findById(updated.getTechnicien().getId())
+                    .orElseThrow(() -> new RuntimeException("Technicien non trouvé")));
+        } else if (updated.getTechnicien() == null) {
+            existing.setTechnicien(null);
+        }
+        if (updated.getUser() != null && updated.getUser().getId() != null) {
+            existing.setUser(userRepository.findById(updated.getUser().getId())
+                    .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé")));
+        } else if (updated.getUser() == null) {
+            existing.setUser(null);
+        }
         return repository.save(existing);
     }
 

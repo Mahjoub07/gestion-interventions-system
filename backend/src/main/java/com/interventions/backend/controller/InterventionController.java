@@ -59,6 +59,14 @@ public class InterventionController {
         return ResponseEntity.ok(service.findByUser(id));
     }
 
+    @GetMapping("/technicien/email/{email}")
+    public ResponseEntity<?> getByTechnicienEmail(@PathVariable String email) {
+        if (email == null || email.trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "L'email technicien est requis"));
+        }
+        return ResponseEntity.ok(service.findByTechnicienEmail(email.trim()));
+    }
+
     @PostMapping
     public ResponseEntity<?> create(@RequestBody Intervention intervention) {
         try {

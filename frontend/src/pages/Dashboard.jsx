@@ -39,7 +39,7 @@ const Dashboard = () => {
         setError('');
         let response;
         if (hasRole('TECHNICIAN')) {
-          response = await interventionService.getByTechnicien(user.id);
+          response = await interventionService.getByTechnicienEmail(user.email);
         } else if (hasRole('USER')) {
           response = await interventionService.getByUser(user.id);
         } else {
@@ -87,9 +87,11 @@ const Dashboard = () => {
           <h1 className="dashboard__title">Tableau de bord</h1>
           <p className="dashboard__subtitle">Bienvenue, {user?.prenom} {user?.nom}</p>
         </div>
-        <Button variant="primary" onClick={() => navigate('/interventions')}>
-          + Nouvelle Intervention
-        </Button>
+        {!hasRole('TECHNICIAN') && (
+          <Button variant="primary" onClick={() => navigate('/interventions')}>
+            + Nouvelle Intervention
+          </Button>
+        )}
       </div>
 
       <div className="dashboard__stats">
@@ -101,7 +103,9 @@ const Dashboard = () => {
 
       <div className="dashboard__actions">
         <Button variant="secondary" size="sm" onClick={() => navigate('/interventions')}>🔧 Gérer les interventions</Button>
-        <Button variant="secondary" size="sm" onClick={() => navigate('/technicians')}>👷 Gérer les techniciens</Button>
+        {hasRole('ADMIN') && (
+          <Button variant="secondary" size="sm" onClick={() => navigate('/technicians')}>👷 Gérer les techniciens</Button>
+        )}
       </div>
 
       <Card title="Interventions récentes" subtitle="Les 5 dernières interventions">

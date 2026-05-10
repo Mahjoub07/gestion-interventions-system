@@ -1,7 +1,9 @@
 package com.interventions.backend.service;
 
+import com.interventions.backend.model.Technicien;
 import com.interventions.backend.model.User;
 import com.interventions.backend.model.enums.Role;
+import com.interventions.backend.repository.TechnicienRepository;
 import com.interventions.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository repository;
+    private final TechnicienRepository technicienRepository;
 
     @Transactional(readOnly = true)
     public List<User> findAll() {
@@ -32,7 +35,15 @@ public class UserService {
     @Transactional
     public User create(User user) {
         validateNewUser(user);
-        return repository.save(user);
+        User saved = repository.save(user);
+        if (saved.getRole() == Role.TECHNICIAN) {
+            Technicien technicien = new Technicien();
+            technicien.setNom(saved.getNom());
+            technicien.setPrenom(saved.getPrenom());
+            technicien.setEmail(saved.getEmail());
+            technicienRepository.save(technicien);
+        }
+        return saved;
     }
 
     @Transactional
@@ -68,7 +79,19 @@ public class UserService {
             if (existing.getRole() == Role.ADMIN && existing.getEmail().equalsIgnoreCase("admin@company.ma") && updated.getRole() != Role.ADMIN) {
                 throw new IllegalStateException("Le rôle de l'admin principal ne peut pas être modifié");
             }
+            Role oldRole = existing.getRole();
             existing.setRole(updated.getRole());
+            if (updated.getRole() == Role.TECHNICIAN && oldRole != Role.TECHNICIAN) {
+                if (technicienRepository.findByEmail(existing.getEmail()).isEmpty()) {
+                    Technicien technicien = new Technicien();
+                    technicien.setNom(existing.getNom());
+                    technicien.setPrenom(existing.getPrenom());
+                    technicien.setEmail(existing.getEmail());
+                    technicienRepository.save(technicien);
+                }
+            } else if (updated.getRole() != Role.TECHNICIAN && oldRole == Role.TECHNICIAN) {
+                technicienRepository.findByEmail(existing.getEmail()).ifPresent(technicienRepository::delete);
+            }
         }
 
         return repository.save(existing);
@@ -83,6 +106,9 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
         if (user.getRole() == Role.ADMIN && user.getEmail().equalsIgnoreCase("admin@company.ma")) {
             throw new IllegalStateException("L'utilisateur admin principal ne peut pas être supprimé");
+        }
+        if (user.getRole() == Role.TECHNICIAN) {
+            technicienRepository.findByEmail(user.getEmail()).ifPresent(technicienRepository::delete);
         }
         repository.deleteById(id);
     }

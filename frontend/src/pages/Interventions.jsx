@@ -50,7 +50,7 @@ const Interventions = () => {
     try {
       let intervRes;
       if (hasRole('TECHNICIAN')) {
-        intervRes = await interventionService.getByTechnicien(user.id);
+        intervRes = await interventionService.getByTechnicienEmail(user.email);
       } else if (hasRole('USER')) {
         intervRes = await interventionService.getByUser(user.id);
       } else {
