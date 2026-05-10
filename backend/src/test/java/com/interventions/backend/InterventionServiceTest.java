@@ -27,12 +27,12 @@ class InterventionServiceTest {
     @Test
     void shouldReturnAllInterventions() {
         List<Intervention> list = List.of(new Intervention(), new Intervention());
-        when(repository.findAll()).thenReturn(list);
+        when(repository.findAllWithRelations()).thenReturn(list);
 
         List<Intervention> result = service.findAll();
 
         assertEquals(2, result.size());
-        verify(repository, times(1)).findAll();
+        verify(repository, times(1)).findAllWithRelations();
     }
 
     @Test
