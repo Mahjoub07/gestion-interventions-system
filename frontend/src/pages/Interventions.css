@@ -39,11 +39,11 @@
 }
 
 .table-actions__btn:hover {
-  background-color: #F1F5F9;
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .table-actions__btn--danger:hover {
-  background-color: #FEE2E2;
+  background-color: rgba(239, 68, 68, 0.15);
 }
 
 .form-grid {
@@ -109,8 +109,8 @@
   min-width: 28px;
   height: 28px;
   padding: 0 8px;
-  background-color: #E0F2FE;
-  color: #012A4A;
+  background-color: rgba(59, 130, 246, 0.15);
+  color: #60A5FA;
   border-radius: 9999px;
   font-size: var(--text-xs);
   font-weight: 600;

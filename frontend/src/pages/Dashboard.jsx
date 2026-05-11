@@ -64,7 +64,7 @@ const Dashboard = () => {
     total: interventions.length,
     enAttente: interventions.filter(i => i.statut === 'EN_ATTENTE').length,
     enCours: interventions.filter(i => i.statut === 'EN_COURS').length,
-    terminees: interventions.filter(i => i.statut === 'TERMINEE').length,
+    terminees: interventions.filter(i => i.statut === 'TERMINE').length,
   };
 
   const recentInterventions = [...interventions]

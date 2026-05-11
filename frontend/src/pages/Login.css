@@ -84,7 +84,7 @@
 .login-field input:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(1, 42, 74, 0.12);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
 .login-field--password { position: relative; }
