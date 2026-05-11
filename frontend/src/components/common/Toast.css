@@ -16,7 +16,7 @@
   padding: 14px 18px;
   border-radius: 12px;
   background-color: var(--bg-card);
-  box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.02), 0 20px 40px rgba(0, 0, 0, 0.45);
   border-left: 4px solid var(--primary);
   min-width: 300px;
   max-width: 480px;
